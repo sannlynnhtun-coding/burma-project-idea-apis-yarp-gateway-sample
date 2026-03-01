@@ -1,0 +1,75 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="space-y-8">
+    <div class="flex flex-col gap-2">
+        <h1 class="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p class="text-muted-foreground italic">Welcome to the Burma Project Ideas YARP Gateway Management.</p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+        <div class="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div class="flex items-center justify-between space-y-0 pb-2">
+                <h3 class="text-sm font-medium">Total Routes</h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+            <div class="text-2xl font-bold">@ViewBag.RouteCount</div>
+            <p class="text-xs text-muted-foreground">@ViewBag.EnabledRouteCount enabled</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div class="flex items-center justify-between space-y-0 pb-2">
+                <h3 class="text-sm font-medium">Total Clusters</h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><path d="M4 14V4h10"/><path d="M6 18h14"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <div class="text-2xl font-bold">@ViewBag.ClusterCount</div>
+            <p class="text-xs text-muted-foreground">Active backend groups</p>
+        </div>
+        <div class="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div class="flex items-center justify-between space-y-0 pb-2">
+                <h3 class="text-sm font-medium">Gateway Status</h3>
+                <div class="h-2 w-2 rounded-full bg-green-500"></div>
+            </div>
+            <div class="text-2xl font-bold text-green-500 uppercase">Healthy</div>
+            <p class="text-xs text-muted-foreground">Monitoring active traffic</p>
+        </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div class="col-span-4 rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+            <div class="p-6">
+                <h3 class="font-semibold text-lg">Quick Actions</h3>
+            </div>
+            <div class="p-6 pt-0 flex gap-4">
+                <a asp-controller="Config" asp-action="EditRoute" class="flex-1 border border-border hover:bg-muted p-4 rounded-lg flex flex-col items-center gap-2 transition-colors">
+                    <span class="bg-primary/10 text-primary p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </span>
+                    <span class="text-sm font-medium">Add New Route</span>
+                </a>
+                <a asp-controller="Config" asp-action="EditCluster" class="flex-1 border border-border hover:bg-muted p-4 rounded-lg flex flex-col items-center gap-2 transition-colors">
+                    <span class="bg-blue-500/10 text-blue-500 p-2 rounded-md">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                    </span>
+                    <span class="text-sm font-medium">Add New Cluster</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-span-3 rounded-xl border border-border bg-card shadow-sm p-6 overflow-hidden">
+            <h3 class="font-semibold text-lg mb-4">System Info</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-muted-foreground italic">LiteDB Storage:</span>
+                    <span class="font-mono">yarp_config.db</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-muted-foreground italic">YARP Version:</span>
+                    <span class="font-mono">Latest Stable</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-primary">
+                    <span class="font-medium italic underline">Configuration is Live!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

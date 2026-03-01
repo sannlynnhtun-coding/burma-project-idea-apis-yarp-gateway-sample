@@ -1,0 +1,58 @@
+@model YarpRoute
+@{
+    bool isNew = string.IsNullOrEmpty(Model.RouteId);
+    ViewData["Title"] = isNew ? "Add Route" : "Edit Route";
+    var clusters = ViewBag.Clusters as List<YarpCluster> ?? new List<YarpCluster>();
+}
+
+<div class="max-w-2xl mx-auto space-y-6">
+    <div class="flex items-center gap-4">
+        <a asp-action="Routes" class="p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </a>
+        <h1 class="text-3xl font-bold tracking-tight">@ViewData["Title"]</h1>
+    </div>
+
+    <div class="rounded-xl border border-border bg-card shadow-sm">
+        <form asp-action="EditRoute" method="post" class="p-6 space-y-6">
+            <div class="space-y-4">
+                <div class="grid gap-2">
+                    <label for="RouteId" class="text-sm font-medium leading-none italic peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Route ID</label>
+                    <input type="text" id="RouteId" name="RouteId" value="@Model.RouteId" @(isNew ? "" : "readonly") 
+                           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono" />
+                    @if (!isNew) { <p class="text-[0.8rem] text-muted-foreground italic">Route ID cannot be changed once created.</p> }
+                </div>
+
+                <div class="grid gap-2">
+                    <label for="ClusterId" class="text-sm font-medium leading-none italic">Cluster</label>
+                    <select id="ClusterId" name="ClusterId" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        <option value="">-- Select a Cluster --</option>
+                        @foreach (var cluster in clusters)
+                        {
+                            <option value="@cluster.ClusterId" selected="@(cluster.ClusterId == Model.ClusterId)">@cluster.ClusterId</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="grid gap-2">
+                    <label for="MatchPath" class="text-sm font-medium leading-none italic">Path Match Pattern</label>
+                    <input type="text" id="MatchPath" name="MatchPath" value="@Model.MatchPath" placeholder="/api/service/{**catch-all}"
+                           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 font-mono" />
+                    <p class="text-[0.8rem] text-muted-foreground">Use <code>{**catch-all}</code> to match all subpaths.</p>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="Enabled" name="Enabled" value="true" @(Model.Enabled ? "checked" : "")
+                           class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                    <input type="hidden" name="Enabled" value="false" />
+                    <label for="Enabled" class="text-sm font-medium leading-none cursor-pointer">Enabled</label>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-border">
+                <a asp-action="Routes" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-muted hover:text-accent-foreground h-10 px-4 py-2 transition-colors">Cancel</a>
+                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow transition-colors">Save Route</button>
+            </div>
+        </form>
+    </div>
+</div>

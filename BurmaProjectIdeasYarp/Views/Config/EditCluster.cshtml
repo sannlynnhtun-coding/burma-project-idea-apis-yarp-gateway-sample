@@ -1,0 +1,59 @@
+@model YarpCluster
+@{
+    bool isNew = string.IsNullOrEmpty(Model.ClusterId);
+    ViewData["Title"] = isNew ? "Add Cluster" : "Edit Cluster";
+    var destNames = string.Join(", ", Model.Destinations.Keys);
+    var destAddresses = string.Join(", ", Model.Destinations.Values);
+}
+
+<div class="max-w-2xl mx-auto space-y-6">
+    <div class="flex items-center gap-4">
+        <a asp-action="Clusters" class="p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </a>
+        <h1 class="text-3xl font-bold tracking-tight">@ViewData["Title"]</h1>
+    </div>
+
+    <div class="rounded-xl border border-border bg-card shadow-sm">
+        <form asp-action="EditCluster" method="post" class="p-6 space-y-6">
+            <div class="space-y-4">
+                <div class="grid gap-2">
+                    <label for="ClusterId" class="text-sm font-medium leading-none italic">Cluster ID</label>
+                    <input type="text" id="ClusterId" name="ClusterId" value="@Model.ClusterId" @(isNew ? "" : "readonly") 
+                           class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono" />
+                    @if (!isNew) { <p class="text-[0.8rem] text-muted-foreground italic">Cluster ID cannot be changed once created.</p> }
+                </div>
+
+                <div class="grid gap-2">
+                    <label for="LoadBalancingPolicy" class="text-sm font-medium leading-none italic">Load Balancing Policy</label>
+                    <select id="LoadBalancingPolicy" name="LoadBalancingPolicy" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                        <option value="RoundRobin" selected="@(Model.LoadBalancingPolicy == "RoundRobin")">Round Robin</option>
+                        <option value="PowerOfTwoChoices" selected="@(Model.LoadBalancingPolicy == "PowerOfTwoChoices")">Power of Two Choices</option>
+                        <option value="LeastRequests" selected="@(Model.LoadBalancingPolicy == "LeastRequests")">Least Requests</option>
+                        <option value="Random" selected="@(Model.LoadBalancingPolicy == "Random")">Random</option>
+                    </select>
+                </div>
+
+                <div class="grid gap-4 pt-4 border-t border-border">
+                    <h3 class="text-sm font-semibold italic">Destinations (Comma-separated)</h3>
+                    <div class="grid gap-2">
+                        <label for="destinationNames" class="text-xs font-medium text-muted-foreground uppercase">Destination Names</label>
+                        <input type="text" id="destinationNames" name="destinationNames" value="@destNames" placeholder="dest1, dest2"
+                               class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 font-mono" />
+                    </div>
+                    <div class="grid gap-2">
+                        <label for="destinationAddresses" class="text-xs font-medium text-muted-foreground uppercase">Destination Addresses</label>
+                        <input type="text" id="destinationAddresses" name="destinationAddresses" value="@destAddresses" placeholder="http://localhost:5001, http://localhost:5002"
+                               class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 font-mono" />
+                    </div>
+                    <p class="text-[0.8rem] text-muted-foreground italic">List destination names and addresses in the same order, separated by commas.</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-border">
+                <a asp-action="Clusters" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-muted hover:text-accent-foreground h-10 px-4 py-2 transition-colors">Cancel</a>
+                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow transition-colors">Save Cluster</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+@model List<YarpCluster>
+@{
+    ViewData["Title"] = "Clusters";
+}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Clusters</h1>
+            <p class="text-muted-foreground italic">Manage your backend service groups and destinations.</p>
+        </div>
+        <a asp-action="EditCluster" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Cluster
+        </a>
+    </div>
+
+    <div class="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <table class="w-full text-sm">
+            <thead class="bg-muted/50 border-b border-border">
+                <tr>
+                    <th class="h-12 px-4 text-left font-medium text-muted-foreground uppercase tracking-wider">Cluster ID</th>
+                    <th class="h-12 px-4 text-left font-medium text-muted-foreground uppercase tracking-wider">Destinations</th>
+                    <th class="h-12 px-4 text-left font-medium text-muted-foreground uppercase tracking-wider">Policy</th>
+                    <th class="h-12 px-4 text-right font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+                @foreach (var cluster in Model)
+                {
+                    <tr class="hover:bg-muted/20 transition-colors">
+                        <td class="p-4 font-medium italic">@cluster.ClusterId</td>
+                        <td class="p-4">
+                            <div class="flex flex-col gap-1">
+                                @foreach (var dest in cluster.Destinations)
+                                {
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-semibold text-muted-foreground">@dest.Key:</span>
+                                        <code class="text-xs">@dest.Value</code>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td class="p-4 text-muted-foreground italic">@(cluster.LoadBalancingPolicy ?? "Default")</td>
+                        <td class="p-4 text-right">
+                            <div class="flex justify-end gap-2">
+                                <a asp-action="EditCluster" asp-route-id="@cluster.ClusterId" class="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                </a>
+                                <form asp-action="DeleteCluster" method="post" onsubmit="return confirm('Are you sure?')" class="inline">
+                                    <input type="hidden" name="id" value="@cluster.ClusterId" />
+                                    <button type="submit" class="p-2 rounded-md hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
